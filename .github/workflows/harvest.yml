@@ -25,6 +25,7 @@ jobs:
     - name: getdata and process data
       run: |
         python harvest.py
+        python apy.py
     
     - name: Commit files
       run: |
