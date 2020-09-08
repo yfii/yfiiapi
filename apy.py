@@ -47,6 +47,7 @@ def getapy():
     ycrv = getcurve()
     apy["ycrv"] = ycrv
     apy["tusd"] = ycrv * 0.98
+    print(apy)
     with open("apy.json", "w") as f:
         f.write(json.dumps(apy))
 
