@@ -1,4 +1,4 @@
-name: 'GitHub Actions bitcoin-bubble-index Bot'
+name: 'GitHub Actions harvest Bot'
  
 on:
   push:
