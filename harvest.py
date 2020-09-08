@@ -116,6 +116,8 @@ def getharvest():
         elif i["StrategyName"] == "crv" and i["name"] == "ycrv":
             ret.append(getcrv(pool, strategy))
     print(ret)
+    with open("harvest.json", "w") as f:
+        f.write(json.dumps(ret))
 
 
 if __name__ == "__main__":
