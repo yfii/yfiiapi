@@ -54,6 +54,9 @@ with open("abi/uniswapRouterv2.json") as f:
 with open("abi/df.json") as f:
     dfABI = json.loads(f.read())
 
+with open("abi/erc20.json") as f:
+    erc20ABI = json.loads(f.read())
+
 uniswap_instance = w3.eth.contract(
     abi=uniswapABI,
     address=w3.toChecksumAddress("0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D"),
@@ -74,7 +77,7 @@ def getyfiiprice():
 yfiiprice = getyfiiprice()
 
 
-def getcrv(pool, strategy):
+def getcrv(pool, strategy, vault, vault_balance):
     contract_instance = w3.eth.contract(abi=crvABI, address=w3.toChecksumAddress(pool))
     crv = contract_instance.functions.claimable_tokens(strategy).call()
     outyfii = uniswap_instance.functions.getAmountsOut(crv, crv2yfii).call()[-1]
@@ -86,10 +89,12 @@ def getcrv(pool, strategy):
         "name": "crv",
         "strategy": strategy,
         "usdprice": usdprice,
+        "vault": vault,
+        "vault_balance": vault_balance,
     }
 
 
-def getdf(pool, strategy):
+def getdf(pool, strategy, vault, vault_balance):
     contract_instance = w3.eth.contract(abi=dfABI, address=w3.toChecksumAddress(pool))
     df = contract_instance.functions.earned(strategy).call()
     outyfii = uniswap_instance.functions.getAmountsOut(df, df2yfii).call()[-1]
@@ -101,6 +106,8 @@ def getdf(pool, strategy):
         "name": "df",
         "strategy": strategy,
         "usdprice": usdprice,
+        "vault": vault,
+        "vault_balance": vault_balance,
     }
 
 
@@ -111,10 +118,30 @@ def getharvest():
         if pool:
             pool = w3.toChecksumAddress(i["pool"])
         strategy = w3.toChecksumAddress(i["Strategy"])
+        vault = i["vault"]
+        token = i["token"]
+        token_instance = w3.eth.contract(
+            abi=erc20ABI, address=w3.toChecksumAddress(token)
+        )
+        decimals = token_instance.functions.decimals().call()
+        vault_balance = (
+            token_instance.functions.balanceOf(vault).call() / 10 ** decimals
+        )
         if i["StrategyName"] == "dforce":
-            ret.append(getdf(pool, strategy))
+            ret.append(getdf(pool, strategy, vault, vault_balance))
         elif i["StrategyName"] == "crv" and i["name"] == "ycrv":
-            ret.append(getcrv(pool, strategy))
+            ret.append(getcrv(pool, strategy, vault, vault_balance))
+        else:
+            ret.append(
+                {
+                    "outyfii": "",
+                    "name": "tusd",
+                    "strategy": strategy,
+                    "usdprice": "",
+                    "vault": vault,
+                    "vault_balance": vault_balance,
+                }
+            )
     print(ret)
     with open("harvest.json", "w") as f:
         f.write(json.dumps(ret))
