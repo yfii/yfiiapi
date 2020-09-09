@@ -47,8 +47,8 @@ def getapy():
     ycrv = getcurve()
     apy["ycrv"] = ycrv
     apy["tusd"] = ycrv * 0.98
-    for k,v in apy.items():
-        apy[k] = f'{round(v*100, 2)}%'
+    for k, v in apy.items():
+        apy[k] = f"{round(v*100, 2)}%"
     print(apy)
     with open("apy.json", "w") as f:
         f.write(json.dumps(apy))
