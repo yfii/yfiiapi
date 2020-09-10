@@ -88,7 +88,7 @@ def getcrv(pool, strategy, vault, vault_balance):
         "outyfii": outyfii,
         "name": "crv",
         "strategy": strategy,
-        "usdprice": usdprice,
+        "outusd": usdprice,
         "vault": vault,
         "vault_balance": vault_balance,
     }
@@ -105,7 +105,7 @@ def getdf(pool, strategy, vault, vault_balance):
         "outyfii": outyfii,
         "name": "df",
         "strategy": strategy,
-        "usdprice": usdprice,
+        "outusd": usdprice,
         "vault": vault,
         "vault_balance": vault_balance,
     }
@@ -137,12 +137,13 @@ def getharvest():
                     "outyfii": "",
                     "name": "tusd",
                     "strategy": strategy,
-                    "usdprice": "",
+                    "outusd": "",
                     "vault": vault,
                     "vault_balance": vault_balance,
                 }
             )
-    print(ret)
+    from pprint import pprint
+    pprint(ret)
     with open("harvest.json", "w") as f:
         f.write(json.dumps(ret))
 
