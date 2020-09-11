@@ -42,6 +42,25 @@ def getcurve():
     return stakeApy
 
 
+def getfortube():
+    url = "https://farm.for.tube/api/v2/bank_tokens"
+    headers = {
+        "referer": "https://for.tube/bank/home",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36",
+    }
+    z1 = requests.get(url, headers=headers)
+    data = z1.json()
+    ret = {}
+    getdata = ['usdc','eth','busd','wbtc']
+    for k, v in data.items():
+        _apy = float(v["estimated_ar"])
+        symbol = v['symbol'].lower()
+        if symbol in getdata:
+            ret[symbol] = f"{round(_apy*100, 2)}%"
+
+    return ret
+
+
 def getapy():
     apy = getdforce()
     ycrv = getcurve()
@@ -49,6 +68,9 @@ def getapy():
     apy["tusd"] = ycrv * 0.98
     for k, v in apy.items():
         apy[k] = f"{round(v*100, 2)}%"
+    
+    fortube_apy = getfortube()
+    apy.update(fortube_apy)
     print(apy)
     with open("apy.json", "w") as f:
         f.write(json.dumps(apy))
