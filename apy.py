@@ -51,10 +51,10 @@ def getfortube():
     z1 = requests.get(url, headers=headers)
     data = z1.json()
     ret = {}
-    getdata = ['usdc','eth','busd','wbtc']
+    getdata = ["usdc", "eth", "busd", "wbtc", "hbtc"]
     for k, v in data.items():
         _apy = float(v["estimated_ar"])
-        symbol = v['symbol'].lower()
+        symbol = v["symbol"].lower()
         if symbol in getdata:
             ret[symbol] = f"{round(_apy*100, 2)}%"
 
@@ -68,7 +68,7 @@ def getapy():
     apy["tusd"] = ycrv * 0.98
     for k, v in apy.items():
         apy[k] = f"{round(v*100, 2)}%"
-    
+
     fortube_apy = getfortube()
     apy.update(fortube_apy)
     print(apy)
