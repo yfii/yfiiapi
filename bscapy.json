@@ -1,1 +1,8 @@
-{"usdt": "NA", "dai": "NA", "ycrv": "NA", "tusd": "NA"}
+{
+    "usdt": "NA",
+    "dai": "NA",
+    "ycrv": "NA",
+    "tusd": "NA",
+    "busd":"NA",
+    "wbnb":"NA"
+}
