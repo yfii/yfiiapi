@@ -11,6 +11,7 @@ WETH = "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
 CRV = "0xD533a949740bb3306d119CC777fa900bA034cd52"
 YFII = "0xa1d0E215a23d7030842FC67cE582a6aFa3CCaB83"
 DAI = "0x6B175474E89094C44Da98b954EedeAC495271d0F"
+FOR = "0x1FCdcE58959f536621d76f5b7FfB955baa5A672F"
 config = [
     {
         "token": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
@@ -43,6 +44,20 @@ config = [
         "name": "tusd",
         "StrategyName": "crv",
     },
+    {
+        "token": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+        "Strategy": "0x17D5C3FFe2A7c7a1E4567c7501d166B0532C8826",
+        "vault": "0x23B4dB3a435517fd5f2661a9c5a16f78311201c1",
+        "name": "usdc",
+        "StrategyName": "for",
+    },
+    {
+        "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+        "Strategy": "0x0c3E69eF29cbD32e0732409B748ef317a5F4f0a5",
+        "vault": "0xa8EA49a9e242fFfBdECc4583551c3BcB111456E6",
+        "name": "eth",
+        "StrategyName": "for",
+    },
 ]
 
 with open("abi/crvdeposit.json") as f:
@@ -57,6 +72,9 @@ with open("abi/df.json") as f:
 with open("abi/erc20.json") as f:
     erc20ABI = json.loads(f.read())
 
+with open("abi/forReward.json") as f:
+    forRewardABI = json.loads(f.read())
+
 uniswap_instance = w3.eth.contract(
     abi=uniswapABI,
     address=w3.toChecksumAddress("0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D"),
@@ -65,6 +83,7 @@ uniswap_instance = w3.eth.contract(
 df2yfii = [DF, WETH, YFII]
 crv2yfii = [CRV, WETH, YFII]
 yfii2dai = [YFII, WETH, DAI]
+for2dai = [FOR, WETH, DAI]
 
 
 def getyfiiprice():
@@ -77,38 +96,41 @@ def getyfiiprice():
 yfiiprice = getyfiiprice()
 
 
-def getcrv(pool, strategy, vault, vault_balance):
+def getcrv(pool, strategy):
     contract_instance = w3.eth.contract(abi=crvABI, address=w3.toChecksumAddress(pool))
     crv = contract_instance.functions.claimable_tokens(strategy).call()
     outyfii = uniswap_instance.functions.getAmountsOut(crv, crv2yfii).call()[-1]
     outyfii = float(w3.fromWei(outyfii, "ether"))
     usdprice = outyfii * yfiiprice
     # print(f"ycrv策略可以收割yfii:{outyfii/1e18},合约地址:{strategy}")
-    return {
-        "outyfii": outyfii,
-        "name": "crv",
-        "strategy": strategy,
-        "outusd": usdprice,
-        "vault": vault,
-        "vault_balance": vault_balance,
-    }
+    return {"outyfii": outyfii, "strategy": strategy, "outusd": usdprice}
 
 
-def getdf(pool, strategy, vault, vault_balance):
+def getdf(pool, strategy):
     contract_instance = w3.eth.contract(abi=dfABI, address=w3.toChecksumAddress(pool))
     df = contract_instance.functions.earned(strategy).call()
     outyfii = uniswap_instance.functions.getAmountsOut(df, df2yfii).call()[-1]
     outyfii = float(w3.fromWei(outyfii, "ether"))
     usdprice = outyfii * yfiiprice
     # print(f"df 策略可以收割yfii:{outyfii/1e18},合约地址:{strategy}")
-    return {
-        "outyfii": outyfii,
-        "name": "df",
-        "strategy": strategy,
-        "outusd": usdprice,
-        "vault": vault,
-        "vault_balance": vault_balance,
-    }
+    return {"outyfii": outyfii, "strategy": strategy, "outusd": usdprice}
+
+
+def getfor(pool, strategy):
+    contract_instance = w3.eth.contract(
+        abi=forRewardABI,
+        address=w3.toChecksumAddress("0xF8Df2E6E46AC00Cdf3616C4E35278b7704289d82"),
+    )
+    _for = contract_instance.functions.checkBalance(strategy).call()
+    if _for > 0:
+        outyfii = uniswap_instance.functions.getAmountsOut(_for, for2dai).call()[-1]
+        outyfii = float(w3.fromWei(outyfii, "ether"))
+        usdprice = outyfii * yfiiprice
+    else:
+        outyfii = 0
+        usdprice = 0
+    # print(f"df 策略可以收割yfii:{outyfii/1e18},合约地址:{strategy}")
+    return {"outyfii": outyfii, "strategy": strategy, "outusd": usdprice}
 
 
 def getharvest():
@@ -127,22 +149,21 @@ def getharvest():
         vault_balance = (
             token_instance.functions.balanceOf(vault).call() / 10 ** decimals
         )
+        name = f'{i["StrategyName"]}-{i["name"]}'
         if i["StrategyName"] == "dforce":
-            ret.append(getdf(pool, strategy, vault, vault_balance))
+            _ret = getdf(pool, strategy)
         elif i["StrategyName"] == "crv" and i["name"] == "ycrv":
-            ret.append(getcrv(pool, strategy, vault, vault_balance))
+            _ret = getcrv(pool, strategy)
+        elif i["StrategyName"] == "for":
+            _ret = getfor(pool, strategy)
         else:
-            ret.append(
-                {
-                    "outyfii": "",
-                    "name": "tusd",
-                    "strategy": strategy,
-                    "outusd": "",
-                    "vault": vault,
-                    "vault_balance": vault_balance,
-                }
-            )
+            _ret = {"outyfii": "", "strategy": strategy, "outusd": ""}
+        _ret["name"] = name
+        _ret["vault"] = vault
+        _ret["vault_balance"] = vault_balance
+        ret.append(_ret)
     from pprint import pprint
+
     pprint(ret)
     with open("harvest.json", "w") as f:
         f.write(json.dumps(ret))
