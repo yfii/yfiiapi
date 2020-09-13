@@ -83,7 +83,7 @@ uniswap_instance = w3.eth.contract(
 df2yfii = [DF, WETH, YFII]
 crv2yfii = [CRV, WETH, YFII]
 yfii2dai = [YFII, WETH, DAI]
-for2dai = [FOR, WETH, DAI]
+for2yfii = [FOR, WETH, DAI]
 
 
 def getyfiiprice():
@@ -123,7 +123,7 @@ def getfor(pool, strategy):
     )
     _for = contract_instance.functions.checkBalance(strategy).call()
     if _for > 0:
-        outyfii = uniswap_instance.functions.getAmountsOut(_for, for2dai).call()[-1]
+        outyfii = uniswap_instance.functions.getAmountsOut(_for, for2yfii).call()[-1]
         outyfii = float(w3.fromWei(outyfii, "ether"))
         usdprice = outyfii * yfiiprice
     else:
