@@ -13,14 +13,14 @@ YFII = "0xa1d0E215a23d7030842FC67cE582a6aFa3CCaB83"
 DAI = "0x6B175474E89094C44Da98b954EedeAC495271d0F"
 FOR = "0x1FCdcE58959f536621d76f5b7FfB955baa5A672F"
 config = [
-    {
-        "token": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
-        "Strategy": "0xe2df4c46acabb1cdb446351d6b24727944a5bfcc",
-        "vault": "0x72Cf258c852Dc485a853370171d46B9D29fD3184",
-        "name": "usdt",
-        "StrategyName": "dforce",
-        "pool": "0x324EebDAa45829c6A8eE903aFBc7B61AF48538df",
-    },
+    # {
+    #     "token": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+    #     "Strategy": "0xe2df4c46acabb1cdb446351d6b24727944a5bfcc",
+    #     "vault": "0x72Cf258c852Dc485a853370171d46B9D29fD3184",
+    #     "name": "usdt",
+    #     "StrategyName": "dforce",
+    #     "pool": "0x324EebDAa45829c6A8eE903aFBc7B61AF48538df",
+    # },
     {
         "token": "0xdF5e0e81Dff6FAF3A7e52BA697820c5e32D806A8",
         "Strategy": "0x898828957133d4c50030a5A2D55Ca370915E6A77",
@@ -67,7 +67,7 @@ config = [
     {
         "token": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
         "Strategy": "0x1a6eC8EB73bf404112475895d6C8814ad5A7bd96",
-        "vault": "0x410D2248e14fbC11394b731e6107f60381c2191A",
+        "vault": "0x72Cf258c852Dc485a853370171d46B9D29fD3184",
         "name": "usdt",
         "StrategyName": "for"
     }
