@@ -57,20 +57,21 @@ config = [
         "vault": "0xa8EA49a9e242fFfBdECc4583551c3BcB111456E6",
         "name": "eth",
         "StrategyName": "for",
-    },{
+    },
+    {
         "token": "0x4Fabb145d64652a948d72533023f6E7A623C7C53",
         "Strategy": "0xB5639130ce84dE9684dA10B5E6d6Ec49828E0987",
         "vault": "0xc46d2fC00554f1f874F37e6e3E828A0AdFEFfbcB",
         "name": "busd",
-        "StrategyName": "for"
+        "StrategyName": "for",
     },
     {
         "token": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
         "Strategy": "0x1a6eC8EB73bf404112475895d6C8814ad5A7bd96",
         "vault": "0x72Cf258c852Dc485a853370171d46B9D29fD3184",
         "name": "usdt",
-        "StrategyName": "for"
-    }
+        "StrategyName": "for",
+    },
 ]
 
 with open("abi/crvdeposit.json") as f:

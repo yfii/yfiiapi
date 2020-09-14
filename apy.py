@@ -51,7 +51,7 @@ def getfortube():
     z1 = requests.get(url, headers=headers)
     data = z1.json()
     ret = {}
-    getdata = ["usdc", "eth", "busd", "wbtc", "hbtc"]
+    getdata = ["usdc", "eth", "busd", "wbtc", "hbtc", "usdt"]
     for k, v in data.items():
         _apy = float(v["estimated_ar"])
         symbol = v["symbol"].lower()
