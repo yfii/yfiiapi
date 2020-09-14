@@ -83,7 +83,7 @@ uniswap_instance = w3.eth.contract(
 df2yfii = [DF, WETH, YFII]
 crv2yfii = [CRV, WETH, YFII]
 yfii2dai = [YFII, WETH, DAI]
-for2yfii = [FOR, WETH, DAI]
+for2yfii = [FOR, WETH, YFII]
 
 
 def getyfiiprice():
