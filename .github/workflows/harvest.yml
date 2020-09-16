@@ -26,6 +26,7 @@ jobs:
       run: |
         python harvest.py
         python apy.py
+        python callharvest.py
     
     - name: Commit files
       run: |
