@@ -72,6 +72,13 @@ config = [
         "name": "usdt",
         "StrategyName": "for",
     },
+    {
+        "token": "0x0316eb71485b0ab14103307bf65a021042c6d380",
+        "Strategy": "0xfe6A5A0efb399E2987bEe4d5DB89B925583d144b",
+        "vault": "0x26AEdD2205FF8a87AEF2eC9691d77Ce3f40CE6E9",
+        "name": "hbtc",
+        "StrategyName": "for"
+    }
 ]
 
 with open("abi/crvdeposit.json") as f:
