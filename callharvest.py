@@ -39,7 +39,7 @@ def getHarvestTime():
     for i in usdcData["data"]:
         if not i["failed"]:
             ret["usdc"] = toBJtime(i["time"])
-            break    
+            break
     for i in ethData["data"]:
         if not i["failed"]:
             ret["eth"] = toBJtime(i["time"])
