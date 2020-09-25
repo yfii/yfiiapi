@@ -46,18 +46,17 @@ def _totalStakedAmount():
 
 
 def getDATA():
-    weekly_reward = pool4_instance.functions.rewardRate().call() / 1e18 * 60480
+    weekly_reward = (
+        pool4_instance.functions.rewardRate().call() / 1e6 * 7 * 24 * 60 * 60
+    )
 
     token_instance = w3.eth.contract(abi=erc20ABI, address=w3.toChecksumAddress(YFII))
     totalStakedAmount = token_instance.functions.balanceOf(POOL4).call() / 1e18
 
-    rewardPerToken = weekly_reward / totalStakedAmount
     YFIIPrice = getyfiiprice()
-
-    YFIWeeklyROI = (rewardPerToken * YFIIPrice) * 100 / 1.01
-    apy = YFIWeeklyROI * 52
-
     TVL = totalStakedAmount * YFIIPrice
+    YFIWeeklyROI = (weekly_reward / TVL) * 100 / 1.01
+    apy = YFIWeeklyROI * 52
     return {"apy": apy, "totalStakedAmount": totalStakedAmount, "TVL": TVL}
 
 
