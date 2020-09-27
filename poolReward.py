@@ -132,8 +132,8 @@ def get_data(pool, rewardTokenAddress, reward_price, lp_price):
     else:
         WeeklyROI = 0
     apy = WeeklyROI * 52
-
-    return {"apy": apy, "totalStakedAmount": stake_lp, "TVL": tvl}
+    apy = f"{round(apy, 2)}%"
+    return {"apy": apy, "staked": stake_lp, "tvl": tvl}
 
 
 config = [
