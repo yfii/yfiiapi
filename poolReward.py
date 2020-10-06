@@ -29,6 +29,9 @@ with open("abi/vault.json") as f:
 with open("abi/uniswap_token.json") as f:
     uniswapTokenABI = json.loads(f.read())
 
+with open("abi/bal_token.json") as f:
+    balTokenABI = json.loads(f.read())
+
 uniswap_instance = w3.eth.contract(
     abi=uniswapABI,
     address=w3.toChecksumAddress("0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D"),
@@ -41,6 +44,31 @@ def getiTokenPrice(vault_address):
     )
     price = vault_instance.functions.getPricePerFullShare().call() / 1e18
     return price
+
+
+def getBalLPPrice(BalTokenAddress):
+    baltoken_instance = w3.eth.contract(
+        abi=balTokenABI, address=w3.toChecksumAddress(BalTokenAddress)
+    )
+    tokens = baltoken_instance.functions.getFinalTokens().call()
+
+    token_tvl = 0
+    for token in tokens:
+        token_balance = baltoken_instance.functions.getBalance(token).call()
+        token_decimals = (
+            w3.eth.contract(abi=erc20ABI, address=w3.toChecksumAddress(token))
+            .functions.decimals()
+            .call()
+        )
+        if token.lower() == WETH.lower():
+            tokentoDai = [WETH, DAI]
+        else:
+            tokentoDai = [token, WETH, DAI]
+        _tokenPrice = getprice(tokentoDai, token_decimals)
+        _tokentvl = token_balance / 10 ** token_decimals * _tokenPrice
+        token_tvl += _tokentvl
+    totalSupply = baltoken_instance.functions.totalSupply().call() / 1e18
+    return token_tvl / totalSupply
 
 
 def getUniswapLPPrice(uniTokenAddress):
@@ -105,9 +133,12 @@ def getDATA():
     return {"apy": apy, "totalStakedAmount": totalStakedAmount, "TVL": TVL}
 
 
-def get_data(pool, rewardTokenAddress, reward_price, lp_price):
+def get_data(pool, rewardTokenAddress, reward_price, lp_price, lp_token=False):
     pool_instance = w3.eth.contract(abi=poolABI, address=w3.toChecksumAddress(pool))
-    lp = pool_instance.functions.lp().call()  # 存的代币
+    if not lp_token:
+        lp = pool_instance.functions.lp().call()  # 存的代币
+    else:
+        lp = lp_token
     lp_instance = w3.eth.contract(abi=erc20ABI, address=w3.toChecksumAddress(lp))
     lp_decimals = lp_instance.functions.decimals().call()
 
@@ -127,6 +158,7 @@ def get_data(pool, rewardTokenAddress, reward_price, lp_price):
         * 60
         * 60
     )
+    print(weekly_reward, reward_price)
     if tvl != 0:
         WeeklyROI = (weekly_reward * reward_price / tvl) * 100
     else:
@@ -158,12 +190,23 @@ config = [
         "reward_price": "getprice(mefi2dai, 8)",
         "lp_price": "getUniswapLPPrice('0xc4b478e749dbcfddf96c6f84f4133e2f03c345a9')",
     },
+    {
+        "name": "bal-yfii",
+        "pool": "0xAFfcD3D45cEF58B1DfA773463824c6F6bB0Dc13a",
+        "rewardTokenAddress": "0xa1d0E215a23d7030842FC67cE582a6aFa3CCaB83",
+        "reward_price": "getprice(yfii2dai, 18)",
+        "lp_price": "getBalLPPrice('0x16cAC1403377978644e78769Daa49d8f6B6CF565')",
+        "lp_token": "0x16cAC1403377978644e78769Daa49d8f6B6CF565",
+    }
 ]
 
 if __name__ == "__main__":
     for i in config:
         reward_price = eval(i["reward_price"])
         lp_price = eval(i["lp_price"])
-        data = get_data(i["pool"], i["rewardTokenAddress"], reward_price, lp_price)
+        lp_token = i.get("lp_token", False)
+        data = get_data(
+            i["pool"], i["rewardTokenAddress"], reward_price, lp_price, lp_token
+        )
         data["name"] = i["name"]
         print(data)
