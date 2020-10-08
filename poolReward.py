@@ -197,7 +197,7 @@ config = [
         "reward_price": "getprice(yfii2dai, 18)",
         "lp_price": "getBalLPPrice('0x16cAC1403377978644e78769Daa49d8f6B6CF565')",
         "lp_token": "0x16cAC1403377978644e78769Daa49d8f6B6CF565",
-    }
+    },
 ]
 
 if __name__ == "__main__":
