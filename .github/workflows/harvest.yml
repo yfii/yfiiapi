@@ -28,6 +28,7 @@ jobs:
         python apy.py
         python callharvest.py
         python bscapy.py
+        python pricePerFullShareMonitor.py
     
     - name: Commit files
       run: |

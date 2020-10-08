@@ -1,0 +1,87 @@
+<html>
+
+    <head>
+        <meta charset="utf-8">
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/echarts@4.8.0/dist/echarts.min.js"></script>
+
+    </head>
+
+    <body>
+        <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+        <div id="main" style="width: 100%;height:100%;"></div>
+        <script type="text/javascript">
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('main'), 'light');
+            $.get('pricePerFullShare.json').done(function (data) {
+                myChart.setOption({
+                    "title": {
+                        text: "pricePerFullShare monitor"
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+                    toolbox: {
+                        feature: {
+                            saveAsImage: {}
+                        }
+                    },
+                    legend: {
+                        data: ['iDAI', 'iUSDC', 'iUSDT','iYCRV',"iTUSD","iETH","iBUSD","iHBTC"]
+                    },
+                    xAxis: {
+                        type: 'category',
+
+                    },
+                    yAxis: {
+                        type: 'value',
+                        min: 1000000000000000000
+                    },
+                    series: [{
+                        data: data["iDAI"],
+                        type: 'line',
+                        name:'iDAI'
+                    }, {
+                        data: data["iUSDT"],
+                        type: 'line',
+                        name:'iUSDT',
+                    }, 
+                    {
+                        data: data["iUSDC"],
+                        type: 'line',
+                        name:'iUSDC'
+                    },{
+                        data: data["iYCRV"],
+                        type: 'line',
+                        name:'iYCRV'
+                    },{
+                        data: data["iETH"],
+                        type: 'line',
+                        name:'iETH'
+                    },{
+                        data: data["iBUSD"],
+                        type: 'line',
+                        name:'iBUSD'
+                    },{
+                        data: data["iHBTC"],
+                        type: 'line',
+                        name:'iHBTC'
+                    },
+                ]
+                });
+            });
+
+
+
+            // });
+        </script>
+    </body>
+
+
+</html>
