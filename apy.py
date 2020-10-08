@@ -27,18 +27,18 @@ def getdforce():
 
 
 def getcurve():
-    url = "https://api.dappub.com/pm2/curve/0x0000000000000000000000000000000000000000/latest"
+    url = "https://api.coinmarketcap.com/data-api/v1/farming/yield/latest"
     headers = {
-        "referer": "https://debank.com/yield",
+        "referer": "https://coinmarketcap.com/yield-farming/",
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36",
     }
     z1 = requests.get(url, headers=headers)
-    data = z1.json()["pools"]
+    data = z1.json()["data"]["farmingProjects"]
     for i in data:
-        name = i["name"]
-        if i["name"] == "yDAI+yUSDC+yUSDT+yTUSD":
-            if i.get("stakeApy", ""):
-                stakeApy = i["stakeApy"]
+        if i["name"] == "Curve":
+            for p in i["poolList"]:
+                if p["name"] == "Y":
+                    stakeApy = p["yearlyROI"] / 100
     return stakeApy
 
 
