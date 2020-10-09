@@ -49,15 +49,32 @@ def getfortube():
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36",
     }
     z1 = requests.get(url, headers=headers)
+
+    url1 = "https://bsc.for.tube/api/v1/bank/markets?mode=extended"
+    z2 = requests.get(
+        url1,
+        headers={
+            "referer": "https://bsc.for.tube/bank/home",
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36",
+            "Authorization": "SFMyNTY.g2gDbQAAACoweDAwMDAwMDAwNGZhOWU2MzVkYmU5MWM4M2FlZTM1N2QwMTQ5NDkzNmRuBgCfP3F7dAFiAAFRgA.8_HNNWK2A0pVVvH71_Ckv9q9NxRdIVxafnG5aLzvd-c",
+        },
+    )
     data = z1.json()
+    data1 = z2.json()
     ret = {}
     getdata = ["usdc", "eth", "busd", "usdt"]
     for k, v in data.items():
         _apy = float(v["estimated_ar"])
         symbol = v["symbol"].lower()
         if symbol in getdata:
-            ret[symbol] = f"{round(_apy*100, 2)}%"
-
+            ret[symbol] = _apy
+    for v in data1["data"]:
+        deposit_interest_rate = float(v["deposit_interest_rate"])
+        symbol = v["token_symbol"].lower()
+        if symbol in getdata:
+            ret[symbol] += deposit_interest_rate
+    for k, v in ret.items():
+        ret[k] = f"{round(v*100, 2)}%"
     return ret
 
 
