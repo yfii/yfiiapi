@@ -1,5 +1,6 @@
 from web3 import Web3, HTTPProvider
 import json
+import time
 
 w3url = "https://mainnet.infura.io/v3/998f64f3627548bbaf2630599c1eefca"
 
@@ -163,8 +164,12 @@ def get_data(pool, rewardTokenAddress, reward_price, lp_price, lp_token=False):
         WeeklyROI = (weekly_reward * reward_price / tvl) * 100
     else:
         WeeklyROI = 0
-    apy = WeeklyROI * 52
-    apy = f"{round(apy, 2)}%"
+    periodFinish = pool_instance.functions.periodFinish().call()
+    if periodFinish < int(time.time()):
+        apy = "0.00%"
+    else:
+        apy = WeeklyROI * 52
+        apy = f"{round(apy, 2)}%"
     return {"apy": apy, "staked": stake_lp, "tvl": tvl}
 
 
