@@ -11,9 +11,11 @@ YFII = "0xa1d0E215a23d7030842FC67cE582a6aFa3CCaB83"
 DAI = "0x6B175474E89094C44Da98b954EedeAC495271d0F"
 MEFI = "0x1a969239E12F07281f8876D11AfceE081D872adf"
 iUSDT = "0x72Cf258c852Dc485a853370171d46B9D29fD3184"
+UNI = "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984"
 
 yfii2dai = [YFII, WETH, DAI]
 mefi2dai = [MEFI, WETH, DAI]
+uni2dai = [UNI, WETH, DAI]
 
 with open("abi/erc20.json") as f:
     erc20ABI = json.loads(f.read())
@@ -202,6 +204,38 @@ config = [
         "reward_price": "getprice(yfii2dai, 18)",
         "lp_price": "getBalLPPrice('0x16cAC1403377978644e78769Daa49d8f6B6CF565')",
         "lp_token": "0x16cAC1403377978644e78769Daa49d8f6B6CF565",
+    },
+    {
+        "name": "eth-usdt",
+        "pool": "0x6C3e4cb2E96B01F4b866965A91ed4437839A121a",
+        "rewardTokenAddress": "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984",
+        "reward_price": "getprice(uni2dai, 18)",
+        "lp_price": "getUniswapLPPrice('0x0d4a11d5EEaaC28EC3F61d100daF4d40471f1852')",
+        "lp_token": "0x0d4a11d5EEaaC28EC3F61d100daF4d40471f1852",
+    },
+    {
+        "name": "eth-usdc",
+        "pool": "0x7FBa4B8Dc5E7616e59622806932DBea72537A56b",
+        "rewardTokenAddress": "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984",
+        "reward_price": "getprice(uni2dai, 18)",
+        "lp_price": "getUniswapLPPrice('0xB4e16d0168e52d35CaCD2c6185b44281Ec28C9Dc')",
+        "lp_token": "0xB4e16d0168e52d35CaCD2c6185b44281Ec28C9Dc",
+    },
+    {
+        "name": "eth-dai",
+        "pool": "0xa1484C3aa22a66C62b77E0AE78E15258bd0cB711",
+        "rewardTokenAddress": "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984",
+        "reward_price": "getprice(uni2dai, 18)",
+        "lp_price": "getUniswapLPPrice('0xA478c2975Ab1Ea89e8196811F51A7B7Ade33eB11')",
+        "lp_token": "0xA478c2975Ab1Ea89e8196811F51A7B7Ade33eB11",
+    },
+    {
+        "name": "eth-wbtc",
+        "pool": "0xCA35e32e7926b96A9988f61d510E038108d8068e",
+        "rewardTokenAddress": "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984",
+        "reward_price": "getprice(uni2dai, 18)",
+        "lp_price": "getUniswapLPPrice('0xBb2b8038a1640196FbE3e38816F3e67Cba72D940')",
+        "lp_token": "0xBb2b8038a1640196FbE3e38816F3e67Cba72D940",
     },
 ]
 
