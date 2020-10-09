@@ -34,11 +34,13 @@ def getcurve():
     }
     z1 = requests.get(url, headers=headers)
     data = z1.json()["data"]["farmingProjects"]
+    stakeApy = 0.041
     for i in data:
         if i["name"] == "Curve":
             for p in i["poolList"]:
                 if p["name"] == "Y":
                     stakeApy = p["yearlyROI"] / 100
+
     return stakeApy
 
 
