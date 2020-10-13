@@ -2,7 +2,7 @@ import json
 
 from web3 import Web3, HTTPProvider
 
-w3url = "https://mainnet.infura.io/v3/998f64f3627548bbaf2630599c1eefca"
+w3url = "https://eth-mainnet.alchemyapi.io/v2/4bdDVB5QAaorY2UE-GBUbM2yQB3QJqzv"
 
 w3 = Web3(HTTPProvider(w3url))
 
