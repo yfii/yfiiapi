@@ -2,7 +2,7 @@ from web3 import Web3, HTTPProvider
 import json
 import time
 
-w3url = "https://mainnet.infura.io/v3/998f64f3627548bbaf2630599c1eefca"
+w3url = "https://eth-mainnet.alchemyapi.io/v2/4bdDVB5QAaorY2UE-GBUbM2yQB3QJqzv"
 
 w3 = Web3(HTTPProvider(w3url))
 
@@ -181,6 +181,13 @@ config = [
         "pool": "0x3d367C9529f260B0661e1C1E91167C9319ee96cA",
         "rewardTokenAddress": "0x72Cf258c852Dc485a853370171d46B9D29fD3184",
         "reward_price": "getiTokenPrice('0x72Cf258c852Dc485a853370171d46B9D29fD3184')",
+        "lp_price": "getprice(yfii2dai, 18)",
+    },    
+    {
+        "name": "pool5",
+        "pool": "0xB6C7Bf515828c1eBf0D5F34930Cda0741eD9263F",
+        "rewardTokenAddress": "0xa1d0e215a23d7030842fc67ce582a6afa3ccab83",
+        "reward_price": "getprice(yfii2dai, 18)",
         "lp_price": "getprice(yfii2dai, 18)",
     },
     {
