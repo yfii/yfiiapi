@@ -12,6 +12,7 @@ CRV = "0xD533a949740bb3306d119CC777fa900bA034cd52"
 YFII = "0xa1d0E215a23d7030842FC67cE582a6aFa3CCaB83"
 DAI = "0x6B175474E89094C44Da98b954EedeAC495271d0F"
 FOR = "0x1FCdcE58959f536621d76f5b7FfB955baa5A672F"
+UNI = "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984"
 config = [
     # {
     #     "token": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
@@ -79,6 +80,38 @@ config = [
         "name": "hbtc",
         "StrategyName": "for",
     },
+    {
+        "token": "0x0d4a11d5EEaaC28EC3F61d100daF4d40471f1852",
+        "Strategy": "0x9466AAC3e97F1E716d97c8331ba346Bb243c13bD",
+        "vault": "0x7E43210a4c6831D421f57026617Fdfc8ED3A0baf",
+        "name": "eth/usdt",
+        "StrategyName": "uni",
+        "pool":"0x6C3e4cb2E96B01F4b866965A91ed4437839A121a"
+    },
+    {
+        "token": "0xa478c2975ab1ea89e8196811f51a7b7ade33eb11",
+        "Strategy": "0x41cCed5B81634EcFbd9eCA039aF5dfD05e713B2c",
+        "vault": "0x19d994471D61d36FE367928Cc58102a376089D1f",
+        "name": "eth/dai",
+        "StrategyName": "uni",
+        "pool":"0xa1484C3aa22a66C62b77E0AE78E15258bd0cB711"
+    },
+    {
+        "token": "0xB4e16d0168e52d35CaCD2c6185b44281Ec28C9Dc",
+        "Strategy": "0x1DE7D7AE631Dc4FFac3af9Cb4a9633820ba85Cd8",
+        "vault": "0x68A23248000d5d4C943EE685989998c1B19bD74E",
+        "name": "eth/usdc",
+        "StrategyName": "uni",
+        "pool":"0x7FBa4B8Dc5E7616e59622806932DBea72537A56b"
+    },
+    {
+        "token": "0xBb2b8038a1640196FbE3e38816F3e67Cba72D940",
+        "Strategy": "0xd24e08bdfefd68138F975035874F38554389A2E6",
+        "vault": "0xb918368082655fA223c162266ecd88Aa7Ae40bc9",
+        "name": "eth/wbtc",
+        "StrategyName": "uni",
+        "pool":"0xCA35e32e7926b96A9988f61d510E038108d8068e"
+    },
 ]
 
 with open("abi/crvdeposit.json") as f:
@@ -105,6 +138,7 @@ df2yfii = [DF, WETH, YFII]
 crv2yfii = [CRV, WETH, YFII]
 yfii2dai = [YFII, WETH, DAI]
 for2yfii = [FOR, WETH, YFII]
+uni2yfii = [UNI, WETH, YFII]
 
 
 def getyfiiprice():
@@ -131,6 +165,16 @@ def getdf(pool, strategy):
     contract_instance = w3.eth.contract(abi=dfABI, address=w3.toChecksumAddress(pool))
     df = contract_instance.functions.earned(strategy).call()
     outyfii = uniswap_instance.functions.getAmountsOut(df, df2yfii).call()[-1]
+    outyfii = float(w3.fromWei(outyfii, "ether"))
+    usdprice = outyfii * yfiiprice
+    # print(f"df 策略可以收割yfii:{outyfii/1e18},合约地址:{strategy}")
+    return {"outyfii": outyfii, "strategy": strategy, "outusd": usdprice}
+
+
+def getuni(pool, strategy):
+    contract_instance = w3.eth.contract(abi=dfABI, address=w3.toChecksumAddress(pool))
+    _uni = contract_instance.functions.earned(strategy).call()
+    outyfii = uniswap_instance.functions.getAmountsOut(_uni, uni2yfii).call()[-1]
     outyfii = float(w3.fromWei(outyfii, "ether"))
     usdprice = outyfii * yfiiprice
     # print(f"df 策略可以收割yfii:{outyfii/1e18},合约地址:{strategy}")
@@ -177,6 +221,8 @@ def getharvest():
             _ret = getcrv(pool, strategy)
         elif i["StrategyName"] == "for":
             _ret = getfor(pool, strategy)
+        elif i["StrategyName"] == "uni":
+            _ret = getuni(pool, strategy)
         else:
             _ret = {"outyfii": "", "strategy": strategy, "outusd": ""}
         _ret["name"] = name
