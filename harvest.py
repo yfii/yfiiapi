@@ -86,7 +86,7 @@ config = [
         "vault": "0x7E43210a4c6831D421f57026617Fdfc8ED3A0baf",
         "name": "eth/usdt",
         "StrategyName": "uni",
-        "pool":"0x6C3e4cb2E96B01F4b866965A91ed4437839A121a"
+        "pool": "0x6C3e4cb2E96B01F4b866965A91ed4437839A121a",
     },
     {
         "token": "0xa478c2975ab1ea89e8196811f51a7b7ade33eb11",
@@ -94,7 +94,7 @@ config = [
         "vault": "0x19d994471D61d36FE367928Cc58102a376089D1f",
         "name": "eth/dai",
         "StrategyName": "uni",
-        "pool":"0xa1484C3aa22a66C62b77E0AE78E15258bd0cB711"
+        "pool": "0xa1484C3aa22a66C62b77E0AE78E15258bd0cB711",
     },
     {
         "token": "0xB4e16d0168e52d35CaCD2c6185b44281Ec28C9Dc",
@@ -102,7 +102,7 @@ config = [
         "vault": "0x68A23248000d5d4C943EE685989998c1B19bD74E",
         "name": "eth/usdc",
         "StrategyName": "uni",
-        "pool":"0x7FBa4B8Dc5E7616e59622806932DBea72537A56b"
+        "pool": "0x7FBa4B8Dc5E7616e59622806932DBea72537A56b",
     },
     {
         "token": "0xBb2b8038a1640196FbE3e38816F3e67Cba72D940",
@@ -110,7 +110,7 @@ config = [
         "vault": "0xb918368082655fA223c162266ecd88Aa7Ae40bc9",
         "name": "eth/wbtc",
         "StrategyName": "uni",
-        "pool":"0xCA35e32e7926b96A9988f61d510E038108d8068e"
+        "pool": "0xCA35e32e7926b96A9988f61d510E038108d8068e",
     },
 ]
 
