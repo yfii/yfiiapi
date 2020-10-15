@@ -182,7 +182,7 @@ config = [
         "rewardTokenAddress": "0x72Cf258c852Dc485a853370171d46B9D29fD3184",
         "reward_price": "getiTokenPrice('0x72Cf258c852Dc485a853370171d46B9D29fD3184')",
         "lp_price": "getprice(yfii2dai, 18)",
-    },    
+    },
     {
         "name": "pool5",
         "pool": "0xB6C7Bf515828c1eBf0D5F34930Cda0741eD9263F",
@@ -246,6 +246,26 @@ config = [
     },
 ]
 
+
+def getlpTVL():
+    lp = [
+        "0x68A23248000d5d4C943EE685989998c1B19bD74E",
+        "0xb918368082655fA223c162266ecd88Aa7Ae40bc9",
+        "0x19d994471D61d36FE367928Cc58102a376089D1f",
+        "0x7E43210a4c6831D421f57026617Fdfc8ED3A0baf",
+    ]
+    for i in lp:
+        vault_instance = w3.eth.contract(abi=vaultABI, address=w3.toChecksumAddress(i))
+        price = vault_instance.functions.getPricePerFullShare().call() / 1e18
+
+        balance = vault_instance.functions.balance().call()
+
+        token = vault_instance.functions.token().call()
+        lpprice = getUniswapLPPrice(token)
+
+        underlying = price * balance / 1e18
+        print(i)
+        print("tvl:", underlying * lpprice)
 if __name__ == "__main__":
     for i in config:
         reward_price = eval(i["reward_price"])
@@ -256,3 +276,7 @@ if __name__ == "__main__":
         )
         data["name"] = i["name"]
         print(data)
+    # print("ethusdt", getUniswapLPPrice("0x0d4a11d5EEaaC28EC3F61d100daF4d40471f1852"))
+    # print("ethusdc", getUniswapLPPrice("0xB4e16d0168e52d35CaCD2c6185b44281Ec28C9Dc"))
+    # print("ethdai", getUniswapLPPrice("0xA478c2975Ab1Ea89e8196811F51A7B7Ade33eB11"))
+    # print("ethwbtc", getUniswapLPPrice("0xBb2b8038a1640196FbE3e38816F3e67Cba72D940"))
