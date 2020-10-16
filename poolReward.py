@@ -298,8 +298,12 @@ def getlpTVL():
         token = vault_instance.functions.token().call()
         lpprice = getUniswapLPPrice(token)
 
-        tvl = balance * pricePerFullShare / 1e18*lpprice
-        data = {"name": i["name"], "tvl": tvl, "staked": balance * pricePerFullShare/1e18}
+        tvl = balance * pricePerFullShare / 1e18 * lpprice
+        data = {
+            "name": i["name"],
+            "tvl": tvl,
+            "staked": balance * pricePerFullShare / 1e18,
+        }
         print(data)
 
 
