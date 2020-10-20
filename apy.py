@@ -17,7 +17,7 @@ def getdforce():
 
     z1 = requests.get(url1, headers=headers)
 
-    url2 = "https://markets.dforce.network/api/v1/getApy/?net=main"
+    url2 = "https://markets.dforce.network/api/v2/getApy/?net=main"
     z2 = requests.get(url2, headers=headers)
 
     apy = {}
