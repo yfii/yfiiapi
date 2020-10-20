@@ -3,7 +3,7 @@ name: 'GitHub Actions harvest Bot'
 on:
   push:
   schedule:
-    - cron: '*/60 * * * *'
+    # - cron: '*/60 * * * *'
 
 
 jobs:
