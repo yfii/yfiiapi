@@ -13,6 +13,8 @@ YFII = "0xa1d0E215a23d7030842FC67cE582a6aFa3CCaB83"
 DAI = "0x6B175474E89094C44Da98b954EedeAC495271d0F"
 FOR = "0x1FCdcE58959f536621d76f5b7FfB955baa5A672F"
 UNI = "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984"
+USDT = "0xdAC17F958D2ee523a2206206994597C13D831ec7"
+
 config = [
     # {
     #     "token": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
@@ -45,16 +47,26 @@ config = [
         "name": "tusd",
         "StrategyName": "crv",
     },
+        {
+        "token": "0x5B5CFE992AdAC0C9D48E05854B2d91C73a003858",
+        "Strategy": "0x99CE9eEF12c68c4B3568AC161024d1Ac49d52A11",
+        "vault": "0xED434A25612B8d64E3257Fff5f96B33031729fDF",
+        "name": "husd3crv",
+        "StrategyName": "crv",
+        "pool": "0x2db0E83599a91b508Ac268a6197b8B14F5e72840",
+    },
     {
         "token": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
-        "Strategy": "0x17D5C3FFe2A7c7a1E4567c7501d166B0532C8826",
+        # "Strategy": "0x17D5C3FFe2A7c7a1E4567c7501d166B0532C8826",
+        "Strategy": "0xC96EA19A7bD3D4f04d6d67E20CDe88e88352Fd14",
         "vault": "0x23B4dB3a435517fd5f2661a9c5a16f78311201c1",
         "name": "usdc",
         "StrategyName": "for",
     },
     {
         "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-        "Strategy": "0x0c3E69eF29cbD32e0732409B748ef317a5F4f0a5",
+        # "Strategy": "0x0c3E69eF29cbD32e0732409B748ef317a5F4f0a5",
+        "Strategy": "0x6FC7Be79036D0D610B252D435177A687EB39c44a",
         "vault": "0xa8EA49a9e242fFfBdECc4583551c3BcB111456E6",
         "name": "eth",
         "StrategyName": "for",
@@ -137,7 +149,7 @@ uniswap_instance = w3.eth.contract(
 df2yfii = [DF, WETH, YFII]
 crv2yfii = [CRV, WETH, YFII]
 yfii2dai = [YFII, WETH, DAI]
-for2yfii = [FOR, WETH, YFII]
+for2yfii = [FOR, USDT,WETH, YFII]
 uni2yfii = [UNI, WETH, YFII]
 
 
@@ -217,7 +229,7 @@ def getharvest():
         name = f'{i["StrategyName"]}-{i["name"]}'
         if i["StrategyName"] == "dforce":
             _ret = getdf(pool, strategy)
-        elif i["StrategyName"] == "crv" and i["name"] == "ycrv":
+        elif i["StrategyName"] == "crv" and i["name"] != "tusd":
             _ret = getcrv(pool, strategy)
         elif i["StrategyName"] == "for":
             _ret = getfor(pool, strategy)
