@@ -47,7 +47,7 @@ config = [
         "name": "tusd",
         "StrategyName": "crv",
     },
-        {
+    {
         "token": "0x5B5CFE992AdAC0C9D48E05854B2d91C73a003858",
         "Strategy": "0x99CE9eEF12c68c4B3568AC161024d1Ac49d52A11",
         "vault": "0xED434A25612B8d64E3257Fff5f96B33031729fDF",
@@ -149,7 +149,7 @@ uniswap_instance = w3.eth.contract(
 df2yfii = [DF, WETH, YFII]
 crv2yfii = [CRV, WETH, YFII]
 yfii2dai = [YFII, WETH, DAI]
-for2yfii = [FOR, USDT,WETH, YFII]
+for2yfii = [FOR, USDT, WETH, YFII]
 uni2yfii = [UNI, WETH, YFII]
 
 

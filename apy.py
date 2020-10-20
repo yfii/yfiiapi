@@ -91,6 +91,7 @@ def getapy():
     fortube_apy = getfortube()
     apy.update(fortube_apy)
     apy["weth"] = apy["eth"]
+    apy["husd"] = "26.65 %"
     print(apy)
     with open("apy.json", "w") as f:
         f.write(json.dumps(apy))
