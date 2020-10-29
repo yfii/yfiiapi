@@ -62,17 +62,17 @@ def getfortube():
     data = z1.json()
     data1 = z2.json()
     ret = {}
-    getdata = ["usdc", "eth", "busd", "usdt"]
+    # getdata = ["usdc", "eth", "busd", "usdt"]
     for k, v in data.items():
         _apy = float(v["estimated_ar"])
         symbol = v["symbol"].lower()
-        if symbol in getdata:
-            ret[symbol] = _apy
+        # if symbol in getdata:
+        ret[symbol] = _apy
     for v in data1["data"]:
         deposit_interest_rate = float(v["deposit_interest_rate"])
         symbol = v["token_symbol"].lower()
-        if symbol in getdata:
-            ret[symbol] += deposit_interest_rate
+        # if symbol in getdata:
+        ret[symbol] += deposit_interest_rate
     for k, v in ret.items():
         ret[k] = f"{round(v*100, 2)}%"
     return ret
