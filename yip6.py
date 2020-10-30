@@ -24,10 +24,10 @@ beforeBlock = int(startBlock - 24 * 60 * 60 / 13 * 7)  # 一周之前的区块�
 beforeAmount = YFII.functions.balanceOf(circularMiningPool).call(
     block_identifier=beforeBlock
 )  # 之前累计的余额
-
+print(beforeAmount/1e18/4)
 # 本次要发送的金额 = (beforeAmount/4)+ 本周的 = (beforeAmount/4)+（当前余额-beforeAmount）
 print(
     YFII.functions.balanceOf(circularMiningPool).call()
-    - beforeAmount
+    - beforeAmount*0.5
     + beforeAmount / 4
 )
