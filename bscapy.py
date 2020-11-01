@@ -87,6 +87,7 @@ def getapy():
     #     apy[k] = f"{round(v*100, 2)}%"
 
     apy = getfortube()
+    apy['wbnb'] = apy['bnb']
     print(apy)
     with open("bscapy.json", "w") as f:
         f.write(json.dumps(apy))
